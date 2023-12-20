@@ -1,4 +1,5 @@
 # Towards Concept-Aware Large Language Models (EMNLP'23)
-[[Paper]](https://aclanthology.org/2023.findings-emnlp.877.pdf)
+[Paper](https://aclanthology.org/2023.findings-emnlp.877.pdf)
 
-Implementation of the concept-aware post processing manipulation done using BERT -- Concept-BERT (described in the EMNLP'23 paper "Towards Concept-Aware Large Language Models").
+RQ1_2: Implementation of the concept understanding of BERT, T5, GPT-3.5 and GPT-4.
+RQ3: Implementation of the concept-aware post-processing manipulation done using BERT -- Concept-BERT.
