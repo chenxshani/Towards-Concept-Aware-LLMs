@@ -60,9 +60,9 @@ def parse_args():
 
 def main(args):
 
-    with open("100-everyday-things-hypernym-up.pickle", "rb") as pf:
+    with open("data/100-everyday-things-hypernym-up.pickle", "rb") as pf:
         hypernym = pickle.load(pf)
-    with open("100-everyday-things-hyponym-down.pickle", "rb") as pf:
+    with open("data/100-everyday-things-hyponym-down.pickle", "rb") as pf:
         hyponym = pickle.load(pf)
 
     tokenizer = BertTokenizer.from_pretrained(args.model_name)
@@ -198,7 +198,7 @@ def main(args):
             plt.show()
 
         elif property_inher:
-            with open("quasimodo_et2transitivity_dict.pickle", "rb") as pf:
+            with open("data/quasimodo_et2transitivity_dict.pickle", "rb") as pf:
                 et2sen = pickle.load(pf)
 
             et_inher_dict = defaultdict(int)
