@@ -1,4 +1,6 @@
 # Towards Concept-Aware Large Language Models (EMNLP'23)
+
+This repository contains the code for the article <b>"Towards Concept-Aware Large Language Models"</b>  
 ### [<b>Link to paper</b>](https://aclanthology.org/2023.findings-emnlp.877.pdf)
 
 <ins>Abstract:</ins>
