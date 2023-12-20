@@ -28,7 +28,7 @@ def parse_args():
         type=int,
         required=False,
         help="How many token completions from the top of BERT's ranked "
-             "vocabulary to use for the concept-aware manipulation.",
+             "vocabulary to retrive.",
     )
 
     parser.add_argument(
