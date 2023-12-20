@@ -52,8 +52,6 @@ def main(args):
 
     openai_key = r""
 
-    et_dumped = {f.split("-")[3] for f in listdir("gpt-3.5-dump\\") if isfile(join("gpt-3.5-dump\\", f))}
-
     with open("100-everyday-things-hypernym-up.pickle", "rb") as pf:
         hypernym = pickle.load(pf)
     with open("100-everyday-things-hyponym-down.pickle", "rb") as pf:
@@ -66,6 +64,11 @@ def main(args):
     transitivity = args.transitivity
     property_inher = args.property_inher
 
+    if asymmetry:
+        et_dumped = {f.split("-")[3] for f in listdir("gpt-3.5-asym-dump\\") if isfile(join("gpt-3.5-asym-dump\\", f))}
+    else:
+        et_dumped = {f.split("-")[3] for f in listdir("gpt-3.5-dump\\") if isfile(join("gpt-3.5-dump\\", f))}
+
     if not transitivity and not property_inher:
 
         for et in tqdm(list(hypernym.keys())):
@@ -76,6 +79,14 @@ def main(args):
             if len(hypernym[et]) > 0:
                 for et_hypernym in hypernym[et]:
                     time.sleep(10)
+
+                    gpt_response = openai.Completion.create(
+                        api_key=openai_key,
+                        model=args.model_name,
+                        prompt=f"Is {et} a type of {et_hypernym}?",
+                        max_tokens=5
+                    )
+
                     if asymmetry:
                         gpt_response_asymmetry = openai.Completion.create(
                                                                 api_key=openai_key,
@@ -83,13 +94,8 @@ def main(args):
                                                                 prompt=f"Is {et_hypernym} a type of {et}?",  # Asymmetry
                                                                 max_tokens=5
                                                                 )
-                    else:
-                        gpt_response = openai.Completion.create(
-                            api_key=openai_key,
-                            model=args.model_name,
-                            prompt=f"Is {et} a type of {et_hypernym}?",
-                            max_tokens=5
-                        )
+
+
                     time.sleep(10)
                     print(f"Is {et} a type of {et_hypernym}?")
                     print(gpt_response["choices"][0]["text"])
@@ -104,6 +110,14 @@ def main(args):
             if len(hyponym[et]) > 0:
                 for et_hyponym in hyponym[et]:
                     time.sleep(10)
+
+                    gpt_response = openai.Completion.create(
+                        api_key=openai_key,
+                        model=args.model_name,
+                        prompt=f"Is {et_hyponym} a type of {et}?",
+                        max_tokens=5
+                    )
+
                     if asymmetry:
                         gpt_response_asymmetry = openai.Completion.create(
                                                                 api_key=openai_key,
@@ -111,13 +125,7 @@ def main(args):
                                                                 prompt=f"Is {et} a type of {et_hyponym}?",  # Asymmetry
                                                                 max_tokens=5
                                                                 )
-                    else:
-                        gpt_response = openai.Completion.create(
-                            api_key=openai_key,
-                            model=args.model_name,
-                            prompt=f"Is {et_hyponym} a type of {et}?",
-                            max_tokens=5
-                        )
+
                     time.sleep(10)
                     print(f"Is {et_hyponym} a type of {et}?")
                     print(gpt_response["choices"][0]["text"])
@@ -127,12 +135,22 @@ def main(args):
                     else:
                         et_hyponym_counter_tmp += int(("yes" or "true") in gpt_response["choices"][0]["text"].lower())
                 et_hyponym_counter[et] = et_hyponym_counter_tmp / len(hyponym[et])
-            with open(f"gpt-3.5-dump\\100-everyday-things-{et}-hypernym-gpt.pickle", "wb") as pf:
-                pickle.dump(et_hypernym_counter, pf, protocol=pickle.HIGHEST_PROTOCOL)
-            with open(f"gpt-3.5-dump\\100-everyday-things-{et}-hyponym-gpt.pickle", "wb") as pf:
-                pickle.dump(et_hyponym_counter, pf, protocol=pickle.HIGHEST_PROTOCOL)
 
-        folder = "gpt-3.5-dump\\"
+            if asymmetry:
+                with open(f"gpt-3.5-asym-dump\\100-everyday-things-{et}-hypernym-gpt.pickle", "wb") as pf:
+                    pickle.dump(et_hypernym_counter, pf, protocol=pickle.HIGHEST_PROTOCOL)
+                with open(f"gpt-3.5-asym-dump\\100-everyday-things-{et}-hyponym-gpt.pickle", "wb") as pf:
+                    pickle.dump(et_hyponym_counter, pf, protocol=pickle.HIGHEST_PROTOCOL)
+            else:
+                with open(f"gpt-3.5-dump\\100-everyday-things-{et}-hypernym-gpt.pickle", "wb") as pf:
+                    pickle.dump(et_hypernym_counter, pf, protocol=pickle.HIGHEST_PROTOCOL)
+                with open(f"gpt-3.5-dump\\100-everyday-things-{et}-hyponym-gpt.pickle", "wb") as pf:
+                    pickle.dump(et_hyponym_counter, pf, protocol=pickle.HIGHEST_PROTOCOL)
+
+        if asymmetry:
+            folder = "gpt-3.5-asym-dump\\"
+        else:
+            folder = "gpt-3.5-dump\\"
         et_hypernym_counter = {}
         for filename in os.listdir(folder):
             if filename.endswith('-hypernym-gpt.pickle'):
@@ -153,6 +171,8 @@ def main(args):
             pickle.dump(et_hypernym_counter, pf, protocol=pickle.HIGHEST_PROTOCOL)
         with open("100-everyday-things-hyponym-gpt.pickle", "wb") as pf:
             pickle.dump(et_hyponym_counter, pf, protocol=pickle.HIGHEST_PROTOCOL)
+
+
 
 
         et_hypernym_counter = [et_hypernym_counter[key][key] for key in et_hypernym_counter.keys()]
