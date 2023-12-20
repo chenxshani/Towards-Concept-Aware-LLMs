@@ -7,8 +7,8 @@ import boto3
 
 sandbox_host = 'mechanicalturk.sandbox.amazonaws.com'
 region_name = 'us-east-1'
-aws_access_key_id = "AKIAI6NQSPMAYYGETH2A"  # "AKIAI6NQSPMAYYGETH2A" # sela: AKIA4AIZD46RKHAC3MMX
-aws_secret_access_key = "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"   # "De6+ULmjJJK/E2ytbAPLTzH3sr/n9QnbqP0UCTp7" # sela: ArXpy88Uou3SWpJOv/0dlRyZQgKyxNHnqK3p6C5J"
+aws_access_key_id = r""
+aws_secret_access_key = r""
 # endpoint_url = 'https://mturk-requester-sandbox.us-east-1.amazonaws.com' # sandbox
 # Uncomment this line to use in production
 endpoint_url = 'https://mturk-requester.us-east-1.amazonaws.com'
